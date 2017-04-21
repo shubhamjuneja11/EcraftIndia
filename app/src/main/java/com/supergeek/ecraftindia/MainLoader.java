@@ -29,9 +29,13 @@ import java.util.ArrayList;
 public class MainLoader extends AsyncTaskLoader<ModelClass> {
     ArrayList<ModelClass> data;
     String response,url="http://geekyboy.16mb.com/getitems.php";
-    public MainLoader(Context context, ArrayList<ModelClass> data) {
+    String item;
+    int decide;
+    public MainLoader(Context context, ArrayList<ModelClass> data,int decide,String item) {
         super(context);
         this.data=data;
+        this.decide=decide;
+        this.item=item;
     }
 
     @Override
@@ -46,20 +50,20 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
             connection.setReadTimeout(15000);
             connection.setDoInput(true);
             connection.setDoOutput(true);
+            if(decide==2) {
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("item",item);
 
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("item", "shoe");
+                String query = builder.build().getEncodedQuery();
 
-            String query = builder.build().getEncodedQuery();
-
-            OutputStream os = connection.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(query);
-            writer.flush();
-            writer.close();
-            os.close();
-
+                OutputStream os = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+            }
 
             connection.connect();
 

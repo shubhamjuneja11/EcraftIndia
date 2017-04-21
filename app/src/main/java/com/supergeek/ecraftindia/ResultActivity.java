@@ -1,9 +1,6 @@
 package com.supergeek.ecraftindia;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.LoaderManager;
@@ -14,17 +11,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
-RecyclerView recyclerView;
+public class ResultActivity extends AppCompatActivity  implements LoaderManager.LoaderCallbacks {
+    RecyclerView recyclerView;
     MainAdapter adapter;
     ArrayList<ModelClass> data;
 
@@ -40,7 +32,7 @@ RecyclerView recyclerView;
         recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new Decoration(this,LinearLayoutManager.HORIZONTAL));
+        recyclerView.addItemDecoration(new Decoration(this, LinearLayoutManager.HORIZONTAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
@@ -60,49 +52,17 @@ RecyclerView recyclerView;
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        return new MainLoader(this,data,1,"");
+        return new MainLoader(this,data,2,getIntent().getStringExtra("key"));
     }
 
     @Override
     public void onLoadFinished(Loader loader, Object data) {
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         Log.e("abcdrf",this.data.size()+"");
     }
 
     @Override
     public void onLoaderReset(Loader loader) {
 
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.dashboard, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
-        }
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent intent=new Intent(MainActivity.this,ResultActivity.class);
-                intent.putExtra("key",query);
-                startActivity(intent);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
     }
 }
