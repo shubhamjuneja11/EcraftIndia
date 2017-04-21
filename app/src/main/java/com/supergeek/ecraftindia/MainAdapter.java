@@ -1,11 +1,16 @@
 package com.supergeek.ecraftindia;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 
@@ -15,8 +20,16 @@ import java.util.ArrayList;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
     ArrayList<ModelClass> data;
+    Context context;
+    String rs;
+    public MainAdapter(Context context,ArrayList<ModelClass> data){
+        this.context=context;
+        this.data=data;
+        rs=context.getResources().getString(R.string.Rs);
+    }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.e("abcde","p");
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.itemlayout, parent, false);
         return new MyViewHolder(itemView);
@@ -25,13 +38,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         ModelClass modelClass=data.get(position);
-        holder.price.setText(modelClass.price);
+        holder.price.setText(rs+" "+String.valueOf(modelClass.price));
         holder.name.setText(modelClass.name);
+        Glide.with(context).load(modelClass.getImage())
+                .thumbnail(0.1f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return data.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

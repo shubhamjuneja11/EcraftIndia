@@ -6,6 +6,10 @@ import android.net.Uri;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -43,13 +47,9 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
             connection.setDoInput(true);
             connection.setDoOutput(true);
 
-            /*Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("ques", model.getQues())
-                    .appendQueryParameter("option1", model.getOption1())
-                    .appendQueryParameter("option2", model.getOption2())
-                    .appendQueryParameter("option3", model.getOption3())
-                    .appendQueryParameter("option4", model.getOption4())
-                    .appendQueryParameter("author", model.getAuthor());
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("item", "shoe");
+
             String query = builder.build().getEncodedQuery();
 
             OutputStream os = connection.getOutputStream();
@@ -58,13 +58,14 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
             writer.write(query);
             writer.flush();
             writer.close();
-            os.close();*/
+            os.close();
 
 
             connection.connect();
 
             inputstream = connection.getInputStream();
             response = readfromstream(inputstream);
+            getdata();
             Log.e("abcd",response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,6 +86,7 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
                     string.append(line);
                     line = reader.readLine();
                 }
+
                 Log.e("abcd", "200");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -93,6 +95,26 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
 
         }
         return string.toString();
+
+    }
+    public void getdata(){
+        try {String name,image;
+            int price;
+            JSONObject object=new JSONObject(response);
+            JSONArray array=object.getJSONArray("item");
+            for(int i=0;i<array.length();i++){
+                JSONObject object1=array.getJSONObject(i);
+                name=object1.getString("name");
+                image=object1.getString("image");
+		image = image.replace("\\","");
+                price=object1.getInt("price");
+
+                data.add(new ModelClass(name,price,image));
+                Log.e("abcde",image);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 }

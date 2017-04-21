@@ -30,11 +30,13 @@ RecyclerView recyclerView;
 
         recyclerView=(RecyclerView)findViewById(R.id.recycler);
         data=new ArrayList<>();
+        adapter=new MainAdapter(this,data);
+        recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
+        recyclerView.addItemDecoration(new Decoration(this,LinearLayoutManager.HORIZONTAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+
 
         ConnectivityManager connectivity=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo network=connectivity.getActiveNetworkInfo();
@@ -62,6 +64,7 @@ RecyclerView recyclerView;
     @Override
     public void onLoadFinished(Loader loader, Object data) {
             adapter.notifyDataSetChanged();
+        Log.e("abcdrf",this.data.size()+"");
     }
 
     @Override
