@@ -1,6 +1,7 @@
 package com.supergeek.ecraftindia;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +53,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         return data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         TextView name,price;
         public MyViewHolder(View itemView) {
@@ -60,6 +61,19 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             imageView=(ImageView)itemView.findViewById(R.id.image);
             name=(TextView)itemView.findViewById(R.id.name);
             price=(TextView)itemView.findViewById(R.id.price);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos=getAdapterPosition();
+            Intent intent=new Intent(context,DecriptionActivity.class);
+            ModelClass model=data.get(pos);
+            intent.putExtra("name",model.getName());
+            intent.putExtra("price",model.getPrice());
+            intent.putExtra("desc",model.getDecription());
+            intent.putExtra("image",model.getImage());
+            context.startActivity(intent);
         }
     }
 }

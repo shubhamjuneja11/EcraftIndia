@@ -102,7 +102,7 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
 
     }
     public void getdata(){
-        try {String name,image;
+        try {String name,image,desc;
             int price;
             JSONObject object=new JSONObject(response);
             JSONArray array=object.getJSONArray("item");
@@ -112,8 +112,8 @@ public class MainLoader extends AsyncTaskLoader<ModelClass> {
                 image=object1.getString("image");
 		image = image.replace("\\","");
                 price=object1.getInt("price");
-
-                data.add(new ModelClass(name,price,image));
+                desc=object1.getString("desc");
+                data.add(new ModelClass(name,price,image,desc));
                 Log.e("abcde",image);
             }
         } catch (JSONException e) {

@@ -12,6 +12,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,12 +23,13 @@ public class ResultActivity extends AppCompatActivity  implements LoaderManager.
     MainAdapter adapter;
     ArrayList<ModelClass> data;
 
-
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        progressBar=(ProgressBar)findViewById(R.id.progress);
+        progressBar.setVisibility(View.VISIBLE);
         recyclerView=(RecyclerView)findViewById(R.id.recycler);
         data=new ArrayList<>();
         adapter=new MainAdapter(this,data);
@@ -47,6 +51,10 @@ public class ResultActivity extends AppCompatActivity  implements LoaderManager.
             catch (Exception e){}
 
         }
+        else {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(this, "Internet is not connected", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -58,7 +66,7 @@ public class ResultActivity extends AppCompatActivity  implements LoaderManager.
     @Override
     public void onLoadFinished(Loader loader, Object data) {
         adapter.notifyDataSetChanged();
-        Log.e("abcdrf",this.data.size()+"");
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

@@ -20,6 +20,9 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,13 +30,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 RecyclerView recyclerView;
     MainAdapter adapter;
     ArrayList<ModelClass> data;
-
+    ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        progress=(ProgressBar)findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
         recyclerView=(RecyclerView)findViewById(R.id.recycler);
         data=new ArrayList<>();
         adapter=new MainAdapter(this,data);
@@ -55,6 +59,8 @@ RecyclerView recyclerView;
             catch (Exception e){}
 
         }
+        else {progress.setVisibility(View.GONE);
+            Toast.makeText(this, "Internet is not connected", Toast.LENGTH_SHORT).show();}
 
     }
 
@@ -66,6 +72,7 @@ RecyclerView recyclerView;
     @Override
     public void onLoadFinished(Loader loader, Object data) {
             adapter.notifyDataSetChanged();
+        progress.setVisibility(View.GONE);
         Log.e("abcdrf",this.data.size()+"");
     }
 
@@ -92,6 +99,7 @@ RecyclerView recyclerView;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 Intent intent=new Intent(MainActivity.this,ResultActivity.class);
                 intent.putExtra("key",query);
                 startActivity(intent);

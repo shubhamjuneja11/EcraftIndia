@@ -8,6 +8,7 @@ public class ModelClass {
     String name;
     int price;
     String image;
+    String decription;
 
     public String getName() {
         return name;
@@ -33,10 +34,19 @@ public class ModelClass {
         this.image = image;
     }
 
-    public ModelClass(String name, int price, String image) {
+    public String getDecription() {
+        return decription;
+    }
+
+    public void setDecription(String decription) {
+        this.decription = decription;
+    }
+
+    public ModelClass(String name, int price, String image, String decription) {
 
         this.name = name;
         this.price = price;
         this.image = image;
+        this.decription = decription;
     }
 }
